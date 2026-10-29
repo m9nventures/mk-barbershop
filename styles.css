@@ -166,9 +166,9 @@ address { font-style: normal; margin-bottom: 8px; }
   .barbers { gap: 32px 12px; }
   .barber__meta { flex-direction: column; gap: 4px; }
   .footer__cols { grid-template-columns: 1fr; gap: 40px; }
-  .footer { padding-bottom: 100px; }
+  .footer { padding-bottom: calc(100px + var(--host-badge, 0px)); }
   .mobile-book {
-    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    display: block; position: fixed; left: 0; right: 0; bottom: var(--host-badge, 0px); z-index: 10;
     padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
     background: var(--charcoal); color: var(--white);
     text-align: center; font-size: 12px; font-weight: 500; letter-spacing: .067em;
@@ -231,7 +231,7 @@ address { font-style: normal; margin-bottom: 8px; }
 .bk-done h3 { font-size: 24px; letter-spacing: 2.4px; line-height: 1.28; margin: 0 0 32px; }
 .bk-done .bk-note { margin: 16px 0 32px; }
 
-.bk-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px max(20px, calc((100% - 1200px) / 2)) calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid var(--charcoal); }
+.bk-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px max(20px, calc((100% - 1200px) / 2)) calc(16px + var(--host-badge, 0px) + env(safe-area-inset-bottom)); border-top: 1px solid var(--charcoal); }
 .bk-foot[hidden] { display: none; }
 
 .bk-error { margin: 16px 0 0; padding: 12px 16px; border: 1px solid #b3261e; color: #b3261e; font-size: 13px; }
