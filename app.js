@@ -101,10 +101,10 @@ for (const b of CONFIG.barbers) {
 // corner. Keep the Book bar and the booking "Continue" button clear of it.
 function clearHostBadge() {
   const badge = document.getElementById("nl-badge-frame");
-  const h = badge && badge.offsetParent !== null ? badge.getBoundingClientRect().height : 0;
+  const h = badge ? badge.getBoundingClientRect().height : 0;
   document.documentElement.style.setProperty("--host-badge", `${Math.round(h)}px`);
 }
-new MutationObserver(clearHostBadge).observe(document.body, { childList: true });
+new MutationObserver(clearHostBadge).observe(document.body, { childList: true, subtree: true });
 addEventListener("resize", clearHostBadge);
 clearHostBadge();
 
