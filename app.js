@@ -11,9 +11,10 @@ const CONFIG = {
   // Live booking runs through Square once SQUARE_ACCESS_TOKEN is set on
   // Netlify (see README). Barbers and services are matched to Square by name,
   // and Square's prices, lengths and open times are used.
-  // Fallback if the booking server isn't running (e.g. drag-and-drop hosting):
-  // Square's own booking page. Set to "" to show the sample "Demo" flow instead.
-  BOOKING_URL: "https://square.site/book/L5EPV9HV51JB4/mk-barbershop",
+  // Optional: Square's own booking page (this shop's is
+  // https://square.site/book/L5EPV9HV51JB4/mk-barbershop). Used only when the
+  // booking server isn't running. Empty = Book shows the on-site sample flow.
+  BOOKING_URL: "",
 
   // Opening hours per weekday (0 = Sunday). null = closed.
   hours: { 0: [10, 15], 1: [9, 19], 2: [9, 19], 3: [9, 19], 4: [9, 20], 5: [9, 20], 6: [8, 17] },
@@ -229,7 +230,7 @@ const state = {};
 function reset() {
   Object.assign(state, {
     step: "barber", barber: null, services: [], day: null, time: null, timeText: "", assigned: null,
-    tip: 0.15, pay: "card", name: "", phone: "", email: "", note: "",
+    name: "", phone: "", email: "", note: "",
     slots: null, slotsReq: null, submitting: false, error: "",
   });
 }
@@ -263,7 +264,7 @@ function canBook(s) {
 }
 
 function totals() {
-  const sub = subtotal(), tip = LIVE ? 0 : sub * state.tip, tax = sub * CONFIG.taxRate;
+  const sub = subtotal(), tip = 0, tax = sub * CONFIG.taxRate;
   return { sub, tip, tax, total: sub + tip + tax };
 }
 
@@ -293,8 +294,7 @@ function renderFoot() {
   }[state.step];
   next.disabled = !ready;
   next.textContent = state.step !== "checkout" ? "Continue"
-    : LIVE ? (state.submitting ? "Booking…" : "Confirm booking")
-    : `Book — ${money(totals().total)}`;
+    : state.submitting ? "Booking…" : "Confirm booking";
 }
 
 const VIEWS = {
@@ -361,25 +361,18 @@ const VIEWS = {
             ${chosen().map((s) => `<div><span>${esc(s.name)} — ${mins(s.mins)}</span><span>${money(s.price)}</span></div>`).join("")}
           </div>
 
-          ${LIVE ? "" : `
-          <p class="label">Tip</p>
-          <div class="bk-tips">
-            ${[0, 0.1, 0.15, 0.2, 0.25].map((p) => `<button class="bk-tip" data-pick-tip="${p}" aria-pressed="${state.tip === p}">${p ? p * 100 + "%" : "None"}</button>`).join("")}
-          </div>`}
+
 
           <p class="label">Your details</p>
           <label class="bk-field"><span>Name</span><input data-field="name" autocomplete="name" value="${esc(state.name)}" required></label>
           <label class="bk-field"><span>Phone</span><input data-field="phone" type="tel" autocomplete="tel" value="${esc(state.phone)}" required></label>
           <label class="bk-field"><span>Email (optional)</span><input data-field="email" type="email" autocomplete="email" value="${esc(state.email)}"></label>
-          ${LIVE ? `<label class="bk-field"><span>Note for your barber (optional)</span><input data-field="note" maxlength="500" value="${esc(state.note)}"></label>` : ""}
+          <label class="bk-field"><span>Note for your barber (optional)</span><input data-field="note" maxlength="500" value="${esc(state.note)}"></label>
         </section>
 
         <section>
           <p class="label">Payment</p>
-          ${LIVE ? `<p class="bk-note">Pay in the shop after your cut. Card, Apple Pay, Google Pay or cash.</p>` : `
-          <button class="bk-option" data-pick-pay="card" aria-pressed="${state.pay === "card"}">Card — pay now</button>
-          <button class="bk-option" data-pick-pay="shop" aria-pressed="${state.pay === "shop"}">Pay in shop</button>
-          <p class="bk-note">${state.pay === "card" ? "Card details are entered on the secure payment page." : "A card may be held to secure your booking."}</p>`}
+          <p class="bk-note">Pay in the shop after your cut. Card, Apple Pay, Google Pay or cash.</p>
 
           <p class="label">Cancellation policy</p>
           <p class="bk-note">${esc(CONFIG.cancellation)}</p>
@@ -387,9 +380,8 @@ const VIEWS = {
           <p class="label">Summary</p>
           <div class="bk-summary">
             <div><span>Services</span><span>${money(t.sub)}</span></div>
-            ${LIVE ? "" : `<div><span>Tip</span><span>${money(t.tip)}</span></div>`}
             <div><span>HST (${CONFIG.taxRate * 100}%)</span><span>${money(t.tax)}</span></div>
-            <div class="bk-summary__total"><span>${LIVE ? "Total, paid in shop" : "Total"}</span><span>${money(t.total)} ${CONFIG.currency}</span></div>
+            <div class="bk-summary__total"><span>Total, paid in shop</span><span>${money(t.total)} ${CONFIG.currency}</span></div>
           </div>
           ${state.error ? `<p class="bk-error" role="alert">${esc(state.error)}</p>` : ""}
         </section>
@@ -408,7 +400,7 @@ const VIEWS = {
           <div><span>Services</span><span>${chosen().map((s) => esc(s.name)).join(", ")}</span></div>
           <div class="bk-summary__total"><span>Total</span><span>${money(totals().total)} ${CONFIG.currency}</span></div>
         </div>
-        <p class="bk-note">${LIVE ? "Need to change it? Use the link in your confirmation, or call the shop." : `A confirmation would be sent by text${state.email ? " and email" : ""}.`}</p>
+        <p class="bk-note">${LIVE ? "Need to change it? Use the link in your confirmation, or call the shop." : "Sample booking: on the live site this goes straight into the shop's Square calendar and a confirmation is sent."}</p>
         <button class="btn" data-close-booking>Done</button>
       </div>`;
   },
@@ -442,7 +434,7 @@ async function submitBooking() {
 /* ---------- Events ---------- */
 
 document.addEventListener("click", (e) => {
-  const el = e.target.closest("[data-book],[data-pick-barber],[data-pick-service],[data-pick-day],[data-pick-time],[data-pick-tip],[data-pick-pay],[data-close-booking],[data-retry]");
+  const el = e.target.closest("[data-book],[data-pick-barber],[data-pick-service],[data-pick-day],[data-pick-time],[data-close-booking],[data-retry]");
   if (!el) return;
 
   if (el.matches("[data-book]")) {
@@ -471,12 +463,6 @@ document.addEventListener("click", (e) => {
     Object.assign(state, { time: el.dataset.pickTime, timeText: el.dataset.label, assigned: el.dataset.who });
     document.querySelectorAll("[data-pick-time]").forEach((b) => b.setAttribute("aria-pressed", b === el));
     renderFoot();
-  } else if (el.dataset.pickTip) {
-    state.tip = Number(el.dataset.pickTip);
-    render();
-  } else if (el.dataset.pickPay) {
-    state.pay = el.dataset.pickPay;
-    render();
   } else if (el.matches("[data-retry]")) {
     state.slotsReq = null;
     render();
@@ -498,6 +484,10 @@ $("bk-next").addEventListener("click", () => {
     const form = document.querySelectorAll("#bk-body input");
     for (const input of form) if (!input.reportValidity()) return;
     if (LIVE) return submitBooking();
+    // Demo: same "Booking…" moment as the real thing.
+    Object.assign(state, { submitting: true });
+    renderFoot();
+    return setTimeout(() => { state.submitting = false; go("done"); }, 900);
   }
   go(STEPS[i + 1]);
 });
