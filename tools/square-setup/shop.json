@@ -1,0 +1,26 @@
+{
+  "currency": "CAD",
+  "barbers": [
+    { "given_name": "Marcus", "family_name": "Example", "email": "", "owner": true },
+    { "given_name": "Andre",  "family_name": "Example", "email": "" },
+    { "given_name": "Kevin",  "family_name": "Example", "email": "" },
+    { "given_name": "Jordan", "family_name": "Example", "email": "" },
+    { "given_name": "Tyler",  "family_name": "Example", "email": "" },
+    { "given_name": "Sam",    "family_name": "Example", "email": "" }
+  ],
+  "services": [
+    { "name": "Adult Haircut",          "description": "Cut, wash and style",              "minutes": 30, "price": 40, "barbers": "all" },
+    { "name": "Skin Fade",              "description": "Fade to the skin, line-up",         "minutes": 45, "price": 45, "barbers": "all" },
+    { "name": "Taper",                  "description": "Low or mid taper, scissor top",     "minutes": 30, "price": 40, "barbers": "all" },
+    { "name": "Student Haircut",        "description": "Valid student ID",                  "minutes": 30, "price": 35, "barbers": "all" },
+    { "name": "Kids Haircut",           "description": "Under 12",                          "minutes": 30, "price": 30, "barbers": "all" },
+    { "name": "Senior Haircut",         "description": "65 and over",                       "minutes": 30, "price": 30, "barbers": "all" },
+    { "name": "Line-Up",                "description": "Edge-up only",                      "minutes": 15, "price": 20, "barbers": "all" },
+    { "name": "Beard Trim",             "description": "Shape and line-up",                 "minutes": 20, "price": 25, "barbers": "all" },
+    { "name": "Hot Towel Shave",        "description": "Straight razor, hot towels",        "minutes": 45, "price": 50, "barbers": ["Marcus", "Kevin"] },
+    { "name": "Haircut and Beard",      "description": "Adult haircut plus beard trim",     "minutes": 60, "price": 60, "barbers": "all" },
+    { "name": "Add-on: Hair Design",    "description": "Lines or patterns, from $15",       "minutes": 15, "price": 15, "barbers": ["Marcus", "Andre", "Jordan"] },
+    { "name": "Add-on: Enhancements",   "description": "Colour fill for line-up or beard",  "minutes": 15, "price": 15, "barbers": "all" },
+    { "name": "Add-on: Eyebrow Clean-Up", "description": "Razor or trim",                   "minutes": 5,  "price": 10, "barbers": "all" }
+  ]
+}

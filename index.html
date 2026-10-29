@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MK Barbershop</title>
+  <meta name="description" content="Cuts, fades and hot-towel shaves. Book online.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  
+
+  <header class="hero" style="--img: url(images/hero.jpg)">
+    <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="images/hero.jpg" aria-hidden="true">
+      <source src="images/hero.mp4" type="video/mp4">
+    </video>
+    <nav class="nav wrap" aria-label="Main">
+      <a href="#" class="logo" data-shop-name>MK Barbershop</a>
+      <div class="nav__links">
+        <a href="#services">Services</a>
+        <a href="#barbers">Barbers</a>
+        <a href="#visit">Visit</a>
+        <a data-book>Book</a>
+      </div>
+    </nav>
+    <div class="hero__copy">
+      <p class="label">Weston Rd — Toronto</p>
+      <h1 data-shop-name>MK Barbershop</h1>
+      <p class="hero__sub">Pick your barber, pick a time — booked in under a minute.</p>
+      <a class="btn btn--ghost" data-book>Book an appointment</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="section wrap" id="how">
+      <p class="label">01 — Booking</p>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><span class="label">Step 1</span><h3>Choose your barber</h3><p>Or "any barber" for the first open chair.</p></li>
+        <li><span class="label">Step 2</span><h3>Pick your services</h3><p>Cuts, beard work and add-ons. Price and time shown upfront.</p></li>
+        <li><span class="label">Step 3</span><h3>Grab a time</h3><p>Live from the shop's calendar. What you see is really open.</p></li>
+        <li><span class="label">Step 4</span><h3>Confirm</h3><p>Name and phone. You're in the book. Pay in the shop.</p></li>
+      </ol>
+      <a class="btn" data-book>Start booking</a>
+    </section>
+
+    <section class="section wrap" id="services">
+      <p class="label">02 — Menu</p>
+      <h2>Services</h2>
+      <div id="services-list"></div>
+    </section>
+
+    <section class="section wrap" id="barbers">
+      <p class="label">03 — Team</p>
+      <h2>Barbers</h2>
+      <div class="barbers" id="barbers-list"></div>
+    </section>
+
+    <section class="band" id="visit">
+      <div class="wrap visit">
+        <div>
+          <p class="label">04 — Visit</p>
+          <h2>The shop</h2>
+          <address>2175 Weston Rd<br>Toronto, ON</address>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=2175+Weston+Rd+Toronto+ON" target="_blank" rel="noopener">Get directions →</a></p>
+          <a class="btn" data-book>Book now</a>
+        </div>
+        <div>
+          <table class="hours">
+            <caption class="label">Hours</caption>
+            <tr><th>Mon — Fri</th><td>09:00 — 19:00</td></tr>
+            <tr><th>Saturday</th><td>08:00 — 17:00</td></tr>
+            <tr><th>Sunday</th><td>10:00 — 15:00</td></tr>
+          </table>
+          <ul class="notes">
+            <li>Walk-ins welcome when a chair is free.</li>
+            <li>Free cancellation up to 12 hours before.</li>
+            <li>Card, Apple Pay, Google Pay or cash.</li>
+            <li>Prices in CAD, plus HST.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <div class="footer__cols">
+      <div>
+        <h3>Explore</h3>
+        <a href="#services">Services</a>
+        <a href="#barbers">Barbers</a>
+        <a data-book>Book</a>
+      </div>
+      <div>
+        <h3>Visit</h3>
+        <span>2175 Weston Rd</span>
+        <span>Toronto, ON</span>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=2175+Weston+Rd+Toronto+ON" target="_blank" rel="noopener">Directions</a>
+      </div>
+      <div>
+        <h3>Follow</h3>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <p class="footer__legal">© <span id="year"></span> <span data-shop-name>MK Barbershop</span> — Sample photos: Unsplash. Video: RDNE Stock project, Pexels.</p>
+  </footer>
+
+  <a class="mobile-book" data-book>Book now</a>
+
+  <!-- Booking flow -->
+  <div class="booking" id="booking" role="dialog" aria-modal="true" aria-labelledby="bk-title" hidden>
+    <header class="bk-bar">
+      <button class="bk-icon" id="bk-back" aria-label="Back">←</button>
+      <div class="bk-bar__mid">
+        <p class="label" id="bk-step"></p>
+        <h2 id="bk-title"></h2>
+      </div>
+      <span class="badge" title="Sample data. No booking is made and no payment is taken.">Demo</span>
+      <button class="bk-icon" id="bk-close" aria-label="Close">✕</button>
+    </header>
+    <div class="bk-body" id="bk-body"></div>
+    <footer class="bk-foot" id="bk-foot">
+      <div>
+        <p class="label" id="bk-meta"></p>
+        <p class="bk-total" id="bk-total"></p>
+      </div>
+      <button class="btn" id="bk-next">Continue</button>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
